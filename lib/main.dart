@@ -14,19 +14,19 @@ void main() {
   runApp(const NuruPrinterApp());
 }
 
-/// Design tokens adhering to the minimal POS aesthetic
+// Color and typography tokens
 class StudioTokens {
   static const Color background = Color(0xFF0C0D0F);
   static const Color surface = Color(0xFF14161A);
   static const Color surfaceBorder = Color(0xFF22262E);
   static const Color slotColor = Color(0xFF07080A);
 
-  // Golden-Green primary palette
+  // Golden-green primary theme
   static const Color goldenGreen = Color(0xFF9EAD86);
   static const Color goldenGreenGlow = Color(0xFFB5C49E);
   static const Color warmGold = Color(0xFFC8A97E);
 
-  // Thermal Receipt Paper & Inks
+  // Paper and ink colors
   static const Color thermalPaper = Color(0xFFFAF7F0);
   static const Color carbonInk = Color(0xFF18191B);
   static const Color mutedInk = Color(0xFF72706B);
@@ -103,15 +103,12 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
   bool _isPrinted = false;
   int _orderId = 419;
 
-  // --------------------------------------------------------------------------
-  // LIVE CLIPPATН PROPERTIES (Demonstrated dynamically for grading rubric)
-  // --------------------------------------------------------------------------
-  bool _enableClipper = true; // Attribute 1: clipper (custom vs null)
-  Clip _clipBehavior = Clip.antiAlias; // Attribute 2: clipBehavior
-  double _toothWidth = 10.0; // Clipper parameter: horizontal frequency
-  double _toothHeight = 7.0; // Clipper parameter: vertical cut depth
+  // Live ClipPath properties for class demo
+  bool _enableClipper = true;
+  Clip _clipBehavior = Clip.antiAlias;
+  double _toothWidth = 10.0;
+  double _toothHeight = 7.0;
 
-  // Gourmet bistro menu items
   final List<Map<String, dynamic>> _items = [
     {'name': 'Kigali Suya Skewers', 'price': 4500.00, 'qty': 2},
     {'name': 'Truffle Herb Fries', 'price': 3000.00, 'qty': 1},
@@ -211,7 +208,6 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Sheet Header Handle
                     Center(
                       child: Container(
                         width: 44,
@@ -242,7 +238,7 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
                     ),
                     const SizedBox(height: 12),
 
-                    // Attribute 1: clipper
+                    // Property 1: clipper
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
@@ -267,8 +263,8 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
                                 const SizedBox(height: 2),
                                 Text(
                                   _enableClipper
-                                      ? 'ZigZagReceiptClipper (Serrated vector edge)'
-                                      : 'null (Default: standard flat rectangle)',
+                                      ? 'ZigZagReceiptClipper (cut teeth)'
+                                      : 'null (standard flat box)',
                                   style: StudioTokens.sans(
                                     fontSize: 11,
                                     color: Colors.white60,
@@ -290,7 +286,7 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
                     ),
                     const SizedBox(height: 10),
 
-                    // Attribute 2: clipBehavior
+                    // Property 2: clipBehavior
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
@@ -346,10 +342,10 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
                           const SizedBox(height: 4),
                           Text(
                             _clipBehavior == Clip.antiAlias
-                                ? 'Smooth vector curves with subpixel anti-aliasing.'
+                                ? 'Anti-aliased edges for clean diagonals.'
                                 : (_clipBehavior == Clip.hardEdge
-                                    ? 'Skips GPU smoothing to save fill-rate rendering cycles.'
-                                    : 'Skips clipping boundary checks completely.'),
+                                    ? 'Hard pixel edges without smoothing to save GPU time.'
+                                    : 'Disables path clipping entirely.'),
                             style: StudioTokens.sans(
                               fontSize: 11,
                               color: Colors.white54,
@@ -360,7 +356,7 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
                     ),
                     const SizedBox(height: 10),
 
-                    // Custom Clipper Parameters
+                    // Clipper parameters
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
@@ -476,11 +472,10 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
         child: Column(
           children: [
             const SizedBox(height: 12),
-            // Minimal header with Live Inspector button
             _buildMinimalHeader(),
             const SizedBox(height: 18),
 
-            // Center: The Clean Order Card + Extruding Receipt Paper
+            // Order Card and Receipt Paper
             Expanded(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -493,7 +488,7 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
               ),
             ),
 
-            // Bottom: Single sleek minimal CTA button
+            // Action Button
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 12, 24, 20),
               child: _buildActionButton(),
@@ -504,9 +499,7 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
     );
   }
 
-  // ==========================================================================
-  // 1. MINIMAL HEADER WITH LIVE CLIPPATН INSPECTOR TRIGGER
-  // ==========================================================================
+  // Header with title and inspector trigger
   Widget _buildMinimalHeader() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -574,9 +567,7 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
     );
   }
 
-  // ==========================================================================
-  // 2. THE ORDER TERMINAL + RECEIPT EXTRUSION
-  // ==========================================================================
+  // Terminal card and receipt extrusion
   Widget _buildOrderTerminalCard() {
     return AnimatedBuilder(
       animation: Listenable.merge([_printController, _tearController]),
@@ -584,7 +575,7 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
         final bool isPrinting =
             _printController.isAnimating && _paperFeedAnim.value < 1.0;
 
-        // Subtle micro-shake while printer head runs
+        // Subtle micro-shake while printer runs
         final double jitterX = isPrinting
             ? math.sin(_printController.value * math.pi * 32) * 1.2
             : 0.0;
@@ -593,7 +584,7 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
           offset: Offset(jitterX, 0),
           child: Column(
             children: [
-              // THE MINIMAL TOP CARD (Order details + total)
+              // Top card showing order details and total
               Container(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
                 decoration: BoxDecoration(
@@ -639,7 +630,6 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
                             ),
                           ],
                         ),
-                        // Clean status pill
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
@@ -682,7 +672,6 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
                     ),
                     const SizedBox(height: 18),
 
-                    // Subtle item summary line
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -705,7 +694,7 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
                     ),
                     const SizedBox(height: 16),
 
-                    // Recessed Paper Exit Slot
+                    // Paper slot opening
                     Container(
                       height: 8,
                       decoration: BoxDecoration(
@@ -729,7 +718,7 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
                 ),
               ),
 
-              // THE PHYSICAL THERMAL PAPER (Emerges from slot)
+              // Paper emerging from the slot
               ClipRect(
                 child: Align(
                   alignment: Alignment.topCenter,
@@ -765,9 +754,7 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
     );
   }
 
-  // ==========================================================================
-  // 3. THE SERRATED PAPER RECEIPT (Utilizes ClipPath with all 3 properties)
-  // ==========================================================================
+  // Physical paper ticket shaped by ClipPath
   Widget _buildCleanPaper() {
     return Container(
       decoration: BoxDecoration(
@@ -779,23 +766,18 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
           ),
         ],
       ),
-      // --- CORE WIDGET DEMO: ClipPath with all 3 constructor attributes ---
       child: ClipPath(
-        // Attribute 1: clipper (CustomClipper<Path>? - default: null)
         clipper: _enableClipper
             ? ZigZagReceiptClipper(
                 toothWidth: _toothWidth,
                 toothHeight: _toothHeight,
               )
             : null,
-        // Attribute 2: clipBehavior (Clip - default: Clip.antiAlias)
         clipBehavior: _clipBehavior,
-        // Attribute 3: child (Widget? - default: null)
         child: Container(
           color: StudioTokens.thermalPaper,
           child: Stack(
             children: [
-              // Inner top shadow for paper slot depth
               Positioned(
                 top: 0,
                 left: 0,
@@ -834,7 +816,7 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
                     const SizedBox(height: 3),
                     Center(
                       child: Text(
-                        'Dine-in • Table 04 • Server: Gideon',
+                        'Dine-in • Table 04 • Server: Erioluwa',
                         style: StudioTokens.mono(
                           color: StudioTokens.mutedInk,
                           fontSize: 9.5,
@@ -843,7 +825,6 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
                     ),
                     const SizedBox(height: 14),
 
-                    // Dashed line
                     const SizedBox(
                       height: 2,
                       width: double.infinity,
@@ -851,7 +832,6 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
                     ),
                     const SizedBox(height: 12),
 
-                    // Items
                     ..._items.map((item) {
                       final name = item['name'] as String;
                       final price = item['price'] as double;
@@ -891,13 +871,11 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
                     ),
                     const SizedBox(height: 10),
 
-                    // Totals
                     _buildReceiptRow('SUBTOTAL', _subtotal),
                     const SizedBox(height: 4),
                     _buildReceiptRow('TAX (10%)', _tax),
                     const SizedBox(height: 10),
 
-                    // Total Bar
                     Container(
                       padding: const EdgeInsets.symmetric(
                         vertical: 6,
@@ -929,7 +907,6 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
 
                     const SizedBox(height: 16),
 
-                    // Barcode
                     SizedBox(
                       height: 32,
                       width: double.infinity,
@@ -952,7 +929,7 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
                 ),
               ),
 
-              // Golden-green rubber ink stamp
+              // Paid ink stamp
               if (_stampAnim.value > 0.01)
                 Positioned(
                   right: 20,
@@ -1019,9 +996,7 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
     );
   }
 
-  // ==========================================================================
-  // 4. BOTTOM ACTION CTA BUTTON
-  // ==========================================================================
+  // Print or tear button
   Widget _buildActionButton() {
     final bool isPrinting = _printController.isAnimating;
 
@@ -1092,9 +1067,7 @@ class _CleanReceiptScreenState extends State<CleanReceiptScreen>
   }
 }
 
-// ============================================================================
-// CUSTOM PAINTER: PERFORATED DASHED LINE
-// ============================================================================
+// Dashed line painter for receipt folds
 class DashedReceiptLinePainter extends CustomPainter {
   const DashedReceiptLinePainter();
 
@@ -1125,9 +1098,7 @@ class DashedReceiptLinePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-// ============================================================================
-// CUSTOM PAINTER: VECTOR BARCODE
-// ============================================================================
+// Pseudo-random vector barcode painter
 class ThermalBarcodePainter extends CustomPainter {
   final int seed;
 
